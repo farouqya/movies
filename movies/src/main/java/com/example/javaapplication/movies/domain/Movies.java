@@ -1,5 +1,7 @@
 package com.example.javaapplication.movies.domain;
 
+import org.postgresql.util.PGInterval;
+
 import java.time.Duration;
 import java.util.List;
 
@@ -78,8 +80,25 @@ public class Movies {
         return length;
     }
 
-    public void setLength(Duration length) {
-        this.length = length;
+    public void setLength(PGInterval pgInterval) {
+        if(pgInterval != null) {
+            long days = pgInterval.getDays();
+            long hours = pgInterval.getHours();
+            long minutes = pgInterval.getMinutes();
+            double seconds = pgInterval.getSeconds();
+
+            this.length = Duration.ofDays(days).plusHours(hours).plusMinutes(minutes).plusSeconds((long) seconds);
+        }
+    }
+
+    public PGInterval toPGInterval() {
+        long seconds = getLength().getSeconds();
+        int days = (int) seconds / (24 * 3600);
+        int hours = (int)((seconds % (24 * 3600)) / 3600);
+        int minutes = (int) ((seconds % 3600) / 60);
+        double secondsFraction = seconds % 60 + getLength().getNano() / 1000000000.0;
+
+        return new PGInterval(0,0,days,hours, minutes, secondsFraction);
     }
 
     @Override
@@ -88,7 +107,6 @@ public class Movies {
                 "title='" + title + '\'' +
                 ", year=" + year +
                 ", genre=" + genre +
-                ", actors=" + actors +
                 ", director='" + director + '\'' +
                 ", rating=" + rating +
                 ", length=" + length +
