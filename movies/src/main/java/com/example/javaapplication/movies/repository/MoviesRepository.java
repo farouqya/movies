@@ -14,11 +14,9 @@ import java.util.List;
 @Component
 public class MoviesRepository implements IMoviesRepository {
 
-    // Object relation mapping --> "final" to make sure that it will be initialized..
     private final JdbcTemplate jdbcTemplate;
     private final RowMapper<Movies> rowMapper;
 
-    // added the constructor to avoid NullPointerException -->
     public MoviesRepository(JdbcTemplate jdbcTemplate,
                             RowMapper<Movies> rowMapper
                             ) {
@@ -28,7 +26,6 @@ public class MoviesRepository implements IMoviesRepository {
 
     @Override
     public Movies get(Long movieId) {
-
         Movies movie = jdbcTemplate.queryForObject("SELECT title, year, genre, director, rating, length\n" +
                 "\tFROM movies Where movie_id = " + movieId, rowMapper);
 
@@ -37,9 +34,7 @@ public class MoviesRepository implements IMoviesRepository {
 
     @Override
     public Movies add(Movies moviesTobeAdded) {
-
         PreparedStatementCreator preparedStatementCreator = (Connection connection) -> {
-
             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO public.movies(\n" +
                     "\ttitle, year, genre, director, rating, length)\n" +
                     "\tVALUES (?, ?, ?, ?, ?, ?)", new String[]{"movie_id"});
@@ -63,7 +58,6 @@ public class MoviesRepository implements IMoviesRepository {
     @Override
     public Movies update(Long movieId, Movies updatedMovies) {
         PreparedStatementCreator preparedStatementCreator = (Connection connection) -> {
-
             PreparedStatement preparedStatement = connection.prepareStatement("UPDATE public.movies\n" +
                     "\tSET title=?, year=?, genre=?, director=?, rating=?, length=?\n" +
                     "\tWHERE movie_id = ?");
@@ -84,9 +78,7 @@ public class MoviesRepository implements IMoviesRepository {
 
     @Override
     public void delete(Long movieId) {
-
         PreparedStatementCreator preparedStatementCreator = (Connection connection) -> {
-
             PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM public.movies\n" +
                     "\tWHERE movie_id = ?");
             preparedStatement.setLong(1, movieId);
@@ -98,7 +90,6 @@ public class MoviesRepository implements IMoviesRepository {
 
     @Override
     public List<Movies> getAll() {
-
         return jdbcTemplate.query("SELECT * FROM movies", rowMapper);
     }
 }

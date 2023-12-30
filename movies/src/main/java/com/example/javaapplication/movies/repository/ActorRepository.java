@@ -24,7 +24,6 @@ public class ActorRepository implements IActorRepository {
 
     @Override
     public Actor get(Long actorsId) {
-
         Actor actor = jdbcTemplate.queryForObject("SELECT name, age, gender, nationality\n" +
                 "\tFROM actors Where actors_id = " + actorsId, rowMapper);
 
@@ -34,7 +33,6 @@ public class ActorRepository implements IActorRepository {
     @Override
     public Actor add(Long movieId, Actor actorsToBeAdded) {
         PreparedStatementCreator preparedStatementCreator = (Connection connection) -> {
-
             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO public.actors(\n" +
                     "\tname, age, gender, nationality, movie_table_id)\n" +
                     "\tVALUES (?, ?, ?, ?, ?)", new String[]{"actors_id"});
@@ -56,9 +54,7 @@ public class ActorRepository implements IActorRepository {
 
     @Override
     public Actor update(Long actorsId, Actor actorsToBeAdded, Long movieId) {
-
         PreparedStatementCreator preparedStatementCreator = (Connection connection) -> {
-
             PreparedStatement preparedStatement = connection.prepareStatement("UPDATE public.actors\n" +
                     "\tSET name=?, age=?, gender=?, nationality=?, movie_table_id=?\n" +
                     "\tWHERE actors_id = ?");
@@ -78,21 +74,17 @@ public class ActorRepository implements IActorRepository {
 
     @Override
     public void delete(Long actorsId) {
-
         PreparedStatementCreator preparedStatementCreator = (Connection connection) -> {
-
             PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM public.actors\n" +
                     "\tWHERE actors_id = ?");
             preparedStatement.setLong(1, actorsId);
             return preparedStatement;
         };
-
         jdbcTemplate.update(preparedStatementCreator);
     }
 
     @Override
     public List<Actor> getAll() {
-
         return jdbcTemplate.query("SELECT * FROM actors", rowMapper);
     }
 }
