@@ -80,7 +80,6 @@ public class Movies {
         return length;
     }
 
-    // PGInterval --> to --> Duration -->
     public void setLength(PGInterval pgInterval) {
         if(pgInterval != null) {
             long days = pgInterval.getDays();
@@ -92,17 +91,7 @@ public class Movies {
         }
     }
 
-    // Duration --> to --> PGInterval -->
     public PGInterval toPGInterval() {
-//        long seconds = getLength().getSeconds();
-//        int days = (int) seconds / (24 * 3600);
-//        int hours = (int)((seconds % (24 * 3600)) / 3600);
-//        int minutes = (int) ((seconds % 3600) / 60);
-//        double secondsFraction = seconds % 60 + getLength().getNano() / 1000000000.0;
-//
-//        return new PGInterval(0,0,days,hours, minutes, secondsFraction);
-
-
         long seconds = getLength().getSeconds();
         int days = (int) seconds / (24 * 3600);
         int hours = (int)((seconds % (24 * 3600)) / 3600);
@@ -110,7 +99,6 @@ public class Movies {
         double secondsFraction = seconds % 60 + getLength().getNano() / 1000000000.0;
 
         return new PGInterval(0,0,days,hours, minutes, secondsFraction);
-
     }
 
     @Override
