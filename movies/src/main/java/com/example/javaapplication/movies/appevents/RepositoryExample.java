@@ -3,7 +3,6 @@ package com.example.javaapplication.movies.appevents;
 import com.example.javaapplication.movies.config.DatabaseToSelect;
 import com.example.javaapplication.movies.domain.Actor;
 import com.example.javaapplication.movies.domain.DatabaseType;
-import com.example.javaapplication.movies.domain.Genre;
 import com.example.javaapplication.movies.domain.Movies;
 import com.example.javaapplication.movies.repository.IActorRepository;
 import com.example.javaapplication.movies.repository.IMoviesRepository;
@@ -38,13 +37,13 @@ public class RepositoryExample {
             System.out.println(movies);
 
             // To add Movies -->
-        Movies moviesToBeAddedToDatabase = new Movies("Run for the Money", 2022, Genre.ACTION, null, "Win Morisaki", 7.2, Duration.ofHours(1));
+        Movies moviesToBeAddedToDatabase = new Movies("Run for the Money", 2022, "ACTION", null, "Win Morisaki", 7.2, Duration.ofHours(1));
         Movies justAddedMovies = iMoviesRepository.add(moviesToBeAddedToDatabase);
         System.out.println("justAddedMovies : " + justAddedMovies);
 
             // to update Movies -->
 
-            Movies moviesToBeUpdatedToDatabase = new Movies("Run for the Money", 2022, Genre.SCIFIC, null, "Win Morisaki", 7.2, Duration.ofHours(1));
+            Movies moviesToBeUpdatedToDatabase = new Movies("Run for the Money", 2022, "SCIFIC", null, "Win Morisaki", 7.2, Duration.ofHours(1));
             Movies justUpdatedMovies = iMoviesRepository.update(10L, moviesToBeUpdatedToDatabase);
             System.out.println("justUpdatedMovies : " + justUpdatedMovies);
 

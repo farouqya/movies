@@ -1,4 +1,4 @@
-package com.example.javaapplication.movies.config;
+package com.example.javaapplication.movies.exceptions;
 
 public class UnsupportedDatabaseException extends RuntimeException {
 

@@ -11,4 +11,6 @@ public interface IActorRepository {
     Actor update(Long actorsId, Actor actorsToBeAdded, Long movieId);
     void delete(Long actorsId);
     List<Actor> getAll();
+    List<Actor> getAllByMoviesId(Long id);
+    void deleteAllByMoviesId(Long id);
 }
