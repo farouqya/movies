@@ -1,14 +1,11 @@
 package com.example.javaapplication.movies.domain;
 
-import com.example.javaapplication.movies.repository.IMoviesRepository;
 import org.postgresql.util.PGInterval;
 
 import java.time.Duration;
 import java.util.List;
 
 public class Movies {
-
-    IMoviesRepository moviesRepository;
 
     private Long id;
     private String title;
@@ -19,6 +16,7 @@ public class Movies {
     private double rating;
     private Duration length;
     String genreString;
+
 
     public Movies(String title, int year, String genreString, List<Actor> actors, String director, double rating, Duration length) {
         this.title = title;
@@ -110,14 +108,12 @@ public class Movies {
         }
     }
 
-    public PGInterval toPGInterval() {
-        long seconds = getLength().getSeconds();
-        int days = (int) seconds / (24 * 3600);
-        int hours = (int)((seconds % (24 * 3600)) / 3600);
-        int minutes = (int) ((seconds % 3600) / 60);
-        double secondsFraction = seconds % 60 + getLength().getNano() / 1000000000.0;
+    public String getGenreString() {
+        return genreString;
+    }
 
-        return new PGInterval(0,0,days,hours, minutes, secondsFraction);
+    public void setGenreString(String genreString) {
+        this.genreString = genreString;
     }
 
     @Override

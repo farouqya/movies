@@ -27,15 +27,12 @@ public class ActorRepository implements IActorRepository {
     public Actor get(Long actorsId) {
         Actor actor = null;
         try {
-            actor = jdbcTemplate.queryForObject("SELECT name, age, gender, nationality\n" +
-                    "\tFROM actors Where actors_id = " + actorsId, rowMapper);
+            actor = jdbcTemplate.queryForObject("SELECT id, name, age, gender, nationality\n" +
+                    "\tFROM actors Where id = " + actorsId, rowMapper);
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
 
-        if (actor != null) {
-            actor.setActorsId(actorsId);
-        }
         return actor;
     }
 
@@ -44,7 +41,7 @@ public class ActorRepository implements IActorRepository {
         PreparedStatementCreator preparedStatementCreator = (Connection connection) -> {
             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO public.actors(\n" +
                     "\tname, age, gender, nationality, movie_table_id)\n" +
-                    "\tVALUES (?, ?, ?, ?, ?)", new String[]{"actors_id"});
+                    "\tVALUES (?, ?, ?, ?, ?)", new String[]{"id"});
             preparedStatement.setString(1,actorsToBeAdded.getName());
             preparedStatement.setInt(2,actorsToBeAdded.getAge());
             preparedStatement.setString(3,actorsToBeAdded.getGender());
@@ -65,7 +62,7 @@ public class ActorRepository implements IActorRepository {
         PreparedStatementCreator preparedStatementCreator = (Connection connection) -> {
             PreparedStatement preparedStatement = connection.prepareStatement("UPDATE public.actors\n" +
                     "\tSET name=?, age=?, gender=?, nationality=?, movie_table_id=?\n" +
-                    "\tWHERE actors_id = ?");
+                    "\tWHERE id = ?");
             preparedStatement.setString(1,actorsToBeAdded.getName());
             preparedStatement.setInt(2,actorsToBeAdded.getAge());
             preparedStatement.setString(3,actorsToBeAdded.getGender());
@@ -84,7 +81,7 @@ public class ActorRepository implements IActorRepository {
     public void delete(Long actorsId) {
         PreparedStatementCreator preparedStatementCreator = (Connection connection) -> {
             PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM public.actors\n" +
-                    "\tWHERE actors_id = ?");
+                    "\tWHERE id = ?");
             preparedStatement.setLong(1, actorsId);
             return preparedStatement;
         };

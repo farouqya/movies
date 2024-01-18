@@ -1,6 +1,7 @@
 package com.example.javaapplication.movies.repository;
 
 import com.example.javaapplication.movies.domain.Movies;
+import com.example.javaapplication.movies.util.PostgresUtil;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -19,10 +20,10 @@ public class MoviesRepository implements IMoviesRepository {
     private final RowMapper<Movies> rowMapper;
 
     public MoviesRepository(JdbcTemplate jdbcTemplate,
-                            RowMapper<Movies> rowMapper
+                            RowMapper<Movies> moviesRowMapper
                             ) {
         this.jdbcTemplate = jdbcTemplate;
-        this.rowMapper = rowMapper;
+        this.rowMapper = moviesRowMapper;
     }
 
     @Override
@@ -49,7 +50,7 @@ public class MoviesRepository implements IMoviesRepository {
             preparedStatement.setString(3,moviesTobeAdded.getGenre().toString());
             preparedStatement.setString(4,moviesTobeAdded.getDirector());
             preparedStatement.setDouble(5,moviesTobeAdded.getRating());
-            preparedStatement.setObject(6,moviesTobeAdded.toPGInterval());
+            preparedStatement.setObject(6, PostgresUtil.toPGInterval(moviesTobeAdded.getLength()));
 
             return preparedStatement;
         };
@@ -68,11 +69,11 @@ public class MoviesRepository implements IMoviesRepository {
                     "\tSET title=?, year=?, genre=?, director=?, rating=?, length=?\n" +
                     "\tWHERE movie_id = ?");
             preparedStatement.setString(1,updatedMovies.getTitle());
-            preparedStatement.setInt(2,updatedMovies.getYear());
+            preparedStatement.setInt(2, updatedMovies.getYear());
             preparedStatement.setString(3,updatedMovies.getGenre().toString());
             preparedStatement.setString(4,updatedMovies.getDirector());
             preparedStatement.setDouble(5,updatedMovies.getRating());
-            preparedStatement.setObject(6,updatedMovies.toPGInterval());
+            preparedStatement.setObject(6,PostgresUtil.toPGInterval(updatedMovies.getLength()));
             preparedStatement.setLong(7, movieId);
 
             return preparedStatement;
