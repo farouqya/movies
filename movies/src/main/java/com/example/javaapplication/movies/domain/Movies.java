@@ -1,5 +1,6 @@
 package com.example.javaapplication.movies.domain;
 
+import com.example.javaapplication.movies.repository.IMoviesRepository;
 import org.postgresql.util.PGInterval;
 
 import java.time.Duration;
@@ -7,6 +8,9 @@ import java.util.List;
 
 public class Movies {
 
+    IMoviesRepository moviesRepository;
+
+    private Long id;
     private String title;
     private int year;
     private Genre genre;
@@ -14,11 +18,18 @@ public class Movies {
     private String director;
     private double rating;
     private Duration length;
+    String genreString;
 
-    public Movies(String title, int year, Genre genre, List<Actor> actors, String director, double rating, Duration length) {
+    public Movies(String title, int year, String genreString, List<Actor> actors, String director, double rating, Duration length) {
         this.title = title;
         this.year = year;
-        this.genre = genre;
+        try {
+            this.genre = Genre.valueOf(Genre.class, genreString.toUpperCase());
+        } catch (IllegalArgumentException e) {
+
+            System.err.println("Invalid Movies Genre. Please pick one of these: " +
+                    "ACTION, COMEDY, DRAMA, HORROR, ROMANCE, SCIFIC, THRILLER, OTHER");
+        }
         this.actors = actors;
         this.director = director;
         this.rating = rating;
@@ -44,8 +55,16 @@ public class Movies {
         this.year = year;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public Genre getGenre() {
-        return genre;
+       return genre;
     }
 
     public void setGenre(Genre genre) {

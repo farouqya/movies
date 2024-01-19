@@ -1,6 +1,7 @@
 package com.example.javaapplication.movies.repository;
 
 import com.example.javaapplication.movies.domain.Movies;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
@@ -26,9 +27,13 @@ public class MoviesRepository implements IMoviesRepository {
 
     @Override
     public Movies get(Long movieId) {
-        Movies movie = jdbcTemplate.queryForObject("SELECT title, year, genre, director, rating, length\n" +
-                "\tFROM movies Where movie_id = " + movieId, rowMapper);
-
+        Movies movie = null;
+        try {
+            movie = jdbcTemplate.queryForObject("SELECT movie_id, title, year, genre, director, rating, length\n" +
+                    "\tFROM movies Where movie_id = " + movieId, rowMapper);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
         return movie;
     }
 

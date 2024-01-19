@@ -1,6 +1,7 @@
 package com.example.javaapplication.movies.repository;
 
 import com.example.javaapplication.movies.domain.Actor;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
@@ -24,9 +25,17 @@ public class ActorRepository implements IActorRepository {
 
     @Override
     public Actor get(Long actorsId) {
-        Actor actor = jdbcTemplate.queryForObject("SELECT name, age, gender, nationality\n" +
-                "\tFROM actors Where actors_id = " + actorsId, rowMapper);
+        Actor actor = null;
+        try {
+            actor = jdbcTemplate.queryForObject("SELECT name, age, gender, nationality\n" +
+                    "\tFROM actors Where actors_id = " + actorsId, rowMapper);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
 
+        if (actor != null) {
+            actor.setActorsId(actorsId);
+        }
         return actor;
     }
 
@@ -48,7 +57,6 @@ public class ActorRepository implements IActorRepository {
         jdbcTemplate.update(preparedStatementCreator, generatedKeyHolder);
         Number keyGenerated = generatedKeyHolder.getKey();
         Long key = keyGenerated.longValue();
-
         return get(key);
     }
 
@@ -86,5 +94,21 @@ public class ActorRepository implements IActorRepository {
     @Override
     public List<Actor> getAll() {
         return jdbcTemplate.query("SELECT * FROM actors", rowMapper);
+    }
+
+    @Override
+    public List<Actor> getAllByMoviesId(Long id) {
+        return jdbcTemplate.query("select * from actors where movie_table_id = ? " , rowMapper, id);
+    }
+
+    @Override
+    public void deleteAllByMoviesId(Long movieId) {
+        PreparedStatementCreator preparedStatementCreator = (Connection connection) -> {
+            PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM public.actors\n" +
+                    "\tWHERE movie_table_id = ?");
+            preparedStatement.setLong(1, movieId);
+            return preparedStatement;
+        };
+        jdbcTemplate.update(preparedStatementCreator);
     }
 }

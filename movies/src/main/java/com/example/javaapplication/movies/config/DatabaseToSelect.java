@@ -1,6 +1,16 @@
 package com.example.javaapplication.movies.config;
 
 import com.example.javaapplication.movies.domain.DatabaseType;
+import com.example.javaapplication.movies.exceptions.UnsupportedDatabaseException;
+import org.springframework.stereotype.Component;
+
+
+@Component
+public class DatabaseToSelect {
+
+
+public static DatabaseType databaseToCompare(String value) throws IllegalArgumentException {
+
 import org.springframework.stereotype.Component;
 
 @Component

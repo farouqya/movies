@@ -6,6 +6,7 @@ public class Actor {
     private int age;
     private String gender;
     private String nationality;
+    private Long actorsId;
 
 
     public Actor(String name, int age, String gender, String nationality) {
@@ -48,6 +49,14 @@ public class Actor {
 
     public void setNationality(String nationality) {
         this.nationality = nationality;
+    }
+
+    public Long getActorsId() {
+        return actorsId;
+    }
+
+    public void setActorsId(Long actorsId) {
+        this.actorsId = actorsId;
     }
 
     @Override
