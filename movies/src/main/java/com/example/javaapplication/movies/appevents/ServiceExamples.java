@@ -1,14 +1,15 @@
 package com.example.javaapplication.movies.appevents;
 
 import com.example.javaapplication.movies.domain.Actor;
-import com.example.javaapplication.movies.domain.Movies;
 import com.example.javaapplication.movies.service.IActorService;
 import com.example.javaapplication.movies.service.IMoviesService;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Component;
 
-@Component
+import java.util.Arrays;
+import java.util.List;
+
+//@Component
 public class ServiceExamples {
 
     private IMoviesService moviesService;
@@ -23,7 +24,7 @@ public class ServiceExamples {
     public void movieServicePlayground() {
 
         //Movies moviesToBeAddedToDatabase = new Movies("Run for the Money", 2022, Genre.ACTION, null, "Win Morisaki", 7.2, Duration.ofHours(1));
-        Movies movie = moviesService.get(10L);
+        //Movies movie = moviesService.get(10L);
 //        System.out.println(movie.getActors());
 //        System.out.println(movie);
 //
@@ -43,13 +44,13 @@ public class ServiceExamples {
     @EventListener(ApplicationReadyEvent.class)
     public void actorServicePlayground() {
 
-        //Actor actor = actorService.get(2L);
-        //System.out.println("get : " + actor);
+        Actor actor = actorService.get(2L);
+        System.out.println("get : " + actor);
 
-        //        List<Actor> actorsToBeAdded = Arrays.asList( new Actor("Mai Whelan", 56, "Female", "American"));
-        Actor actor1 = new Actor("Jerry", 29, "mouse", "American");
-//        Actor actorsToBeAdded = actorService.add(2L, actor1);
-//        System.out.println("actorsToBeAdded : " + actorsToBeAdded);
+        List<Actor> actorsList= Arrays.asList( new Actor("Mai ", 56, "male", "American"));
+        Actor actor10 = new Actor("Jerry11", 30, "mouse", "American");
+        Actor actorsToBeAdded = actorService.add(5L, actor10);
+        System.out.println("actorsToBeAdded : " + actorsToBeAdded);
 //        Actor toUpdateActors = actorService.update(20L,actor1,100L);
 //        System.out.println(toUpdateActors);
 

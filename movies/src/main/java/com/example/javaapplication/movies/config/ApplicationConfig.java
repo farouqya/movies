@@ -8,6 +8,7 @@ import com.example.javaapplication.movies.repository.IMoviesRepository;
 import com.example.javaapplication.movies.service.ActorService;
 import com.example.javaapplication.movies.service.IActorService;
 import com.example.javaapplication.movies.service.IMoviesService;
+import com.example.javaapplication.movies.util.PostgresUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -24,5 +25,10 @@ public class ApplicationConfig {
     @Bean
     public IActorService actorService(IMoviesRepository moviesRepository, IActorRepository actorRepository, IMoviesService moviesService) {
         return new ActorService(moviesRepository,actorRepository, moviesService);
+    }
+
+    @Bean
+    public PostgresUtil postgresUtil(){
+        return new PostgresUtil();
     }
 }

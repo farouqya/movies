@@ -6,7 +6,7 @@ public class Actor {
     private int age;
     private String gender;
     private String nationality;
-    private Long actorsId;
+    private Long id;
 
 
     public Actor(String name, int age, String gender, String nationality) {
@@ -51,18 +51,19 @@ public class Actor {
         this.nationality = nationality;
     }
 
-    public Long getActorsId() {
-        return actorsId;
+    public Long getId() {
+        return id;
     }
 
-    public void setActorsId(Long actorsId) {
-        this.actorsId = actorsId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @Override
     public String toString() {
         return "Actor{" +
-                "name='" + name + '\'' +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
                 ", age=" + age +
                 ", gender='" + gender + '\'' +
                 ", nationality='" + nationality + '\'' +
