@@ -11,5 +11,4 @@ public interface IMoviesRepository {
     Movies update(Long movieId, Movies updatedMovies);
     void delete(Long movieId);
     List<Movies> getAll();
-    //List<Movies> getAllMoviesByActorId(Long id)
 }

@@ -6,7 +6,6 @@ import com.example.javaapplication.movies.exceptions.ArgumentException;
 import com.example.javaapplication.movies.exceptions.ResourceIsNotFoundException;
 import com.example.javaapplication.movies.repository.IActorRepository;
 import com.example.javaapplication.movies.repository.IMoviesRepository;
-
 import java.util.Map;
 
 public class ActorService implements IActorService {
@@ -51,7 +50,6 @@ public class ActorService implements IActorService {
         Movies movies = moviesService.get(movieId);
         Actor updatedActor = actorRepository.update(actorsId, actorsToBeAdded, movieId);
         return get(actorsId);
-
     }
 
     @Override

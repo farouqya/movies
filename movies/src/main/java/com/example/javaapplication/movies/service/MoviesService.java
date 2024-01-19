@@ -10,12 +10,12 @@ import com.example.javaapplication.movies.repository.IMoviesRepository;
 import com.example.javaapplication.movies.util.PostgresUtil;
 import org.postgresql.util.PGInterval;
 import org.springframework.stereotype.Service;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
 
 @Service
 public class MoviesService implements IMoviesService {
@@ -48,7 +48,6 @@ public class MoviesService implements IMoviesService {
         if (movies.getRating() <= 0) {
             throw new ArgumentException("Rating must be a Zero Or a positive number!! ");
         }
-
         if (movies.getTitle() == null || movies.getGenre() == null) {
             throw new ResourceIsNotFoundException(" ((Name and Genre)) should not be null!!");
         }

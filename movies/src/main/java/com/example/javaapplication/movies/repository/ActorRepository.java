@@ -32,7 +32,6 @@ public class ActorRepository implements IActorRepository {
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
-
         return actor;
     }
 
@@ -72,8 +71,7 @@ public class ActorRepository implements IActorRepository {
 
             return preparedStatement;
         };
-
-            jdbcTemplate.update(preparedStatementCreator);
+        jdbcTemplate.update(preparedStatementCreator);
         return get(actorsId);
     }
 

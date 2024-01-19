@@ -8,7 +8,6 @@ import com.example.javaapplication.movies.repository.IActorRepository;
 import com.example.javaapplication.movies.repository.IMoviesRepository;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
-
 import java.time.Duration;
 import java.util.List;
 import java.util.Scanner;
@@ -41,14 +40,13 @@ public class RepositoryExample {
         System.out.println("justAddedMovies : " + justAddedMovies);
 
             // to update Movies -->
-
             Movies moviesToBeUpdatedToDatabase = new Movies("YYYYYY", 2022, "SCIFIC", null, "Win Morisaki", 7.2, Duration.ofHours(1));
             Movies justUpdatedMovies = iMoviesRepository.update(10L, moviesToBeUpdatedToDatabase);
             System.out.println("justUpdatedMovies : " + justUpdatedMovies);
 
             // to delete Movies -->
-
          iMoviesRepository.delete(13L);
+
 
             // to get all Movies..
             List<Movies> moviesList = iMoviesRepository.getAll();

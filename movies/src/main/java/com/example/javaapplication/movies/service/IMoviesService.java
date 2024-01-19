@@ -1,7 +1,6 @@
 package com.example.javaapplication.movies.service;
 
 import com.example.javaapplication.movies.domain.Movies;
-
 import java.util.Map;
 
 public interface IMoviesService {

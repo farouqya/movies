@@ -35,7 +35,6 @@ public class MoviesRepository implements IMoviesRepository {
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
-
         return movie;
     }
 
@@ -51,7 +50,6 @@ public class MoviesRepository implements IMoviesRepository {
             preparedStatement.setString(4,moviesTobeAdded.getDirector());
             preparedStatement.setDouble(5,moviesTobeAdded.getRating());
             preparedStatement.setObject(6, PostgresUtil.toPGInterval(moviesTobeAdded.getLength()));
-
             return preparedStatement;
         };
         GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
@@ -69,7 +67,7 @@ public class MoviesRepository implements IMoviesRepository {
                     "\tSET title=?, year=?, genre=?, director=?, rating=?, length=?\n" +
                     "\tWHERE movie_id = ?");
             preparedStatement.setString(1,updatedMovies.getTitle());
-            preparedStatement.setInt(2, updatedMovies.getYear());
+            preparedStatement.setInt(2,updatedMovies.getYear());
             preparedStatement.setString(3,updatedMovies.getGenre().toString());
             preparedStatement.setString(4,updatedMovies.getDirector());
             preparedStatement.setDouble(5,updatedMovies.getRating());

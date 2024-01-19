@@ -15,8 +15,7 @@ public class Movies {
     private String director;
     private double rating;
     private Duration length;
-    String genreString;
-
+    private String genreString;
 
     public Movies(String title, int year, String genreString, List<Actor> actors, String director, double rating, Duration length) {
         this.title = title;
@@ -107,7 +106,7 @@ public class Movies {
             this.length = Duration.ofDays(days).plusHours(hours).plusMinutes(minutes).plusSeconds((long) seconds);
         }
     }
-
+  
     public String getGenreString() {
         return genreString;
     }
