@@ -25,5 +25,4 @@ public class ApplicationConfig {
     public IActorService actorService(IMoviesRepository moviesRepository, IActorRepository actorRepository, IMoviesService moviesService) {
         return new ActorService(moviesRepository,actorRepository, moviesService);
     }
-
 }

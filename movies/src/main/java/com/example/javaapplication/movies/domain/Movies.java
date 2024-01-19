@@ -126,7 +126,6 @@ public class Movies {
                 "title='" + title + '\'' +
                 ", year=" + year +
                 ", genre=" + genre +
-                ", actors=" + actors +
                 ", director='" + director + '\'' +
                 ", rating=" + rating +
                 ", length=" + length +

@@ -12,7 +12,6 @@ import java.sql.SQLException;
 @Component
 public class MoviesRowMapper implements RowMapper<Movies> {
 
-
     @Override
     public Movies mapRow(ResultSet rs, int rowNum) throws SQLException {
         BeanPropertyRowMapper<Movies> rowMapper = new BeanPropertyRowMapper<>(Movies.class);

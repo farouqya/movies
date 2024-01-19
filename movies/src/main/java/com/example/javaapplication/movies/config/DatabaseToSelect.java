@@ -9,8 +9,14 @@ import org.springframework.stereotype.Component;
 public class DatabaseToSelect {
 
 
-    public static DatabaseType databaseToCompare(String value) throws IllegalArgumentException {
+public static DatabaseType databaseToCompare(String value) throws IllegalArgumentException {
 
+import org.springframework.stereotype.Component;
+
+@Component
+public class DatabaseToSelect {
+
+    public static DatabaseType databaseToCompare(String value) throws IllegalArgumentException {
         for (DatabaseType databaseType : DatabaseType.values()) {
             if (databaseType.name().equalsIgnoreCase(value)) {
                 switch (databaseType) {

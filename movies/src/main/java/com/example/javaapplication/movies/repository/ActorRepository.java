@@ -76,7 +76,7 @@ public class ActorRepository implements IActorRepository {
             return preparedStatement;
         };
 
-            jdbcTemplate.update(preparedStatementCreator);
+        jdbcTemplate.update(preparedStatementCreator);
         return get(actorsId);
     }
 

@@ -34,7 +34,6 @@ public class MoviesRepository implements IMoviesRepository {
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
-
         return movie;
     }
 
