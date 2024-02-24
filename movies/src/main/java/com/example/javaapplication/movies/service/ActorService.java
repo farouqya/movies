@@ -45,11 +45,15 @@ public class ActorService implements IActorService {
     }
 
     @Override
-    public Actor update(Long actorsId, Actor actorsToBeAdded, Long movieId) {
+    public Actor update(Long actorsId, Actor actorsToBeAdded, Long movieId) throws ResourceIsNotFoundException {
         get(actorsId);
         Movies movies = moviesService.get(movieId);
-        Actor updatedActor = actorRepository.update(actorsId, actorsToBeAdded, movieId);
-        return get(actorsId);
+        if (movies != null) {
+            Actor updatedActor = actorRepository.update(actorsId, actorsToBeAdded, movieId);
+            return get(actorsId);
+        } else {
+            throw new ResourceIsNotFoundException("Movie with id "  + movieId + " is not found");
+        }
     }
 
     @Override

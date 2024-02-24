@@ -49,12 +49,15 @@ public class MoviesService implements IMoviesService {
             throw new ArgumentException("Rating must be a Zero Or a positive number!! ");
         }
         if (movies.getTitle() == null || movies.getGenre() == null) {
-            throw new ResourceIsNotFoundException(" ((Name and Genre)) should not be null!!");
+            throw new ResourceIsNotFoundException("((Name and Genre)) should not be null!!");
         }
 
         Movies addedMovies = moviesRepository.add(movies);
         Long addedMoviesId = addedMovies.getId();// primary Key
-        movies.getActors().forEach(actors -> actorRepository.add(addedMoviesId, actors)); // ForeignID Key..
+        if(movies.getActors() != null) {
+            movies.getActors().forEach(actors -> actorRepository.add(addedMoviesId, actors)); // ForeignID Key..
+        }
+
         return get(addedMoviesId);
     }
 
@@ -110,7 +113,6 @@ public class MoviesService implements IMoviesService {
 
                         try {
                             for (Actor actors : actorsList) {
-                                System.out.println(actors);
                                 actorRepository.add(movieId, actors);
                             }
                         } catch (Exception e) {
@@ -120,7 +122,7 @@ public class MoviesService implements IMoviesService {
                 } else if ("director".equals(key)) {
                     movies1.setDirector((String) value);
                 } else if ("rating".equals(key)) {
-                    if ((Integer) value < 0) {
+                    if ((double) value < 0) {
                         throw new ArgumentException("Rating should have a non-negative number");
                     } else {
                         double settedRating = (double) value;
