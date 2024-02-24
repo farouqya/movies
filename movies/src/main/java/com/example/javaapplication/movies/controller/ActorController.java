@@ -34,8 +34,8 @@ public class ActorController {
     }
 
     @PatchMapping(path="/{movieId}/{actorsId}")
-    public Actor patchUpdate(@PathVariable Long actorsId, @RequestBody Map<Object, Object> updates, @PathVariable Long movieId) {
-        return actorService.patchUpdate(actorsId,updates,movieId);
+    public Actor patchUpdate(@PathVariable Long movieId, @PathVariable Long actorsId, @RequestBody Map<Object, Object> updates) {
+        return actorService.patchUpdate(movieId,actorsId,updates);
     }
 
     @DeleteMapping(path="/{actorsId}")
