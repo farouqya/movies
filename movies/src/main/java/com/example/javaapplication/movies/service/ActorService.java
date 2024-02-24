@@ -57,7 +57,7 @@ public class ActorService implements IActorService {
     }
 
     @Override
-    public Actor patchUpdate(Long actorsId, Map<Object, Object> updates, Long movieId) {
+    public Actor patchUpdate(Long movieId, Long actorsId, Map<Object, Object> updates) {
         Actor actor = get(actorsId);
         Movies movies = moviesService.get(movieId);
 
