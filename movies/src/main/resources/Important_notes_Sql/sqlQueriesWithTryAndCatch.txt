@@ -1,0 +1,25 @@
+-- idempotency --> to catch exception, so the application won't be interrupted.. for instance "if not exists"..
+
+-- for instance -->
+
+--CREATE TABLE if not exists public.users
+--(
+--    id bigserial,
+--    name character varying,
+--    age integer,
+--    PRIMARY KEY (id)
+--);
+--
+--ALTER TABLE IF EXISTS public.users
+--    OWNER to postgres;
+
+
+-- example of try catch -->
+--Do
+--$$
+--    Begin
+--        ALTER TABLE IF EXISTS public.users RENAME not_exist TO name_column;
+--    EXCEPTION
+--        WHEN undefined_column THEN RAISE NOTICE 'column another_table.not_exist does not exist';
+--    END
+--$$;

@@ -22,7 +22,7 @@ public class MoviesRowMapper implements RowMapper<Movies> {
         movies.setLength(pgInterval);
         movies = rowMapper.mapRow(rs, rowNum);
         Long movieId = rs.getLong("movie_id");
-        movies.setId(movieId);
+        movies.setMovieId(movieId);
         return movies;
     }
 }

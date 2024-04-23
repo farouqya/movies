@@ -58,15 +58,15 @@ class ActorServiceTest {
     void addActors() {
         Movies movie1 = new Movies("First Movie", 1999, "SCIFIC", null, "Win Morisaki", 7.2, Duration.ofHours(1));
         Movies movie2 = new Movies();
-        Actor actor1 = new Actor("Jerry11", 30, "mouse", "American");
-        Actor actor2 = new Actor("Jerry15", 21, "mouse", "American");
+        Actor actor1 = new Actor("Jerry11", 30, "mouse", "American", movieTableId);
+        Actor actor2 = new Actor("Jerry15", 21, "mouse", "American", movieTableId);
 
         Mockito.when(actorRepository.add(any(),any()))
                 .thenAnswer((InvocationOnMock invocation) -> {
                     Object firstArgument = invocation.getArgument(0);
                     Long movieArg = (Long) firstArgument;
                     Movies movie = new Movies();
-                    movie.setId(445555L);
+                    movie.setMovieId(445555L);
                     Object secondArgument = invocation.getArgument(1);
                     Actor actorArg = (Actor) secondArgument;
                     actorArg.setId(55L);
@@ -86,7 +86,7 @@ class ActorServiceTest {
 
     @Test
     void addActorsThrowsArgumentException() {
-        Actor actor2 = new Actor("Baggio", -21, "mouse", "American");
+        Actor actor2 = new Actor("Baggio", -21, "mouse", "American", movieTableId);
         Mockito.when(actorRepository.add(any(),any())).thenReturn(actor2);
 
         Mockito.when(actorRepository.add(any(),any()))
@@ -94,7 +94,7 @@ class ActorServiceTest {
                     Object firstArgument = invocation.getArgument(0);
                     Long movieArg = (Long) firstArgument;
                     Movies movie = new Movies();
-                    movie.setId(445555L);
+                    movie.setMovieId(445555L);
                     Object secondArgument = invocation.getArgument(1);
                     Actor actorArg = (Actor) secondArgument;
                     actorArg.setId(55L);
@@ -111,7 +111,7 @@ class ActorServiceTest {
     @Test
     void addActorsThrowResourceIsNotFoundException() {
 
-        Actor actor2 = new Actor(null, 21, "mouse", "American");
+        Actor actor2 = new Actor(null, 21, "mouse", "American", movieTableId);
         Mockito.when(actorRepository.add(any(),any())).thenReturn(actor2);
         ResourceIsNotFoundException resourceIsNotFoundException =
                 assertThrowsExactly(ResourceIsNotFoundException.class, ()-> actorService.add(55L, actor2));
@@ -124,7 +124,7 @@ class ActorServiceTest {
         Movies movie1 = new Movies("First Movie", 1999, "SCIFIC", null, "Win Morisaki", 7.2, Duration.ofHours(1));
         Movies movie2 = new Movies();
         Actor actor1 = new Actor();
-        Actor actor2 = new Actor("Baggio", -21, "mouse", "American");
+        Actor actor2 = new Actor("Baggio", -21, "mouse", "American", movieTableId);
         Mockito.when(actorRepository.get(55L)).thenReturn(actor1);
         Mockito.when(actorRepository.get(55L)).thenReturn(actor2);
         Mockito.when(moviesService.get(4456L)).thenReturn(movie1);
@@ -150,7 +150,7 @@ class ActorServiceTest {
         Movies movie1 = new Movies("First Movie", 1999, "SCIFIC", null, "Win Morisaki", 7.2, Duration.ofHours(1));
         Movies movie2 = new Movies();
         Actor actor1 = new Actor();
-        Actor actor2 = new Actor("Baggio", -21, "mouse", "American");
+        Actor actor2 = new Actor("Baggio", -21, "mouse", "American", movieTableId);
 
         Mockito.when(actorRepository.get(55L)).thenReturn(actor1);
 
@@ -164,7 +164,7 @@ class ActorServiceTest {
     void patchUpdateGetActors() {
 
         Map<Object, Object> updates = Map.of("id", 55L,"name", "Sandra", "age", 21, "gender", "Female","nationality","American");
-        Actor actor2 = new Actor("Baggio", 21, "mouse", "American");
+        Actor actor2 = new Actor("Baggio", 21, "mouse", "American", movieTableId);
         Mockito.when(actorRepository.get(55L)).thenReturn(actor2);
         Mockito.when(actorRepository.update(55L,actor2,4456L)).thenReturn(actor2);
         Actor newActor = actorService.patchUpdate(4456L,55L,updates);
@@ -197,7 +197,7 @@ class ActorServiceTest {
         Movies movie1 = new Movies();
         Movies moviesUpdating = new Movies();
         Actor actor1 = new Actor();
-        Actor actor2 = new Actor("Sandra", 21, "Female", "American");
+        Actor actor2 = new Actor("Sandra", 21, "Female", "American", movieTableId);
         Mockito.when(actorRepository.get(55L)).thenReturn(actor1);
         Mockito.when(moviesRepository.get(45L)).thenReturn(moviesUpdating);
 

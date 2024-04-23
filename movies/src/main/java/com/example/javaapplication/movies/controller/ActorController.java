@@ -5,6 +5,7 @@ import com.example.javaapplication.movies.service.IActorService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RequestMapping("/api/actors")
@@ -20,6 +21,11 @@ public class ActorController {
     @GetMapping(path="/{actorsId}")
     public Actor getOne(@PathVariable Long actorsId) {
         return actorService.get(actorsId);
+    }
+
+    @GetMapping()
+    public List<Actor> getAllActors() {
+        return actorService.getAll();
     }
 
     @PostMapping(path="/{movieId}")

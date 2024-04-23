@@ -1,21 +1,40 @@
 package com.example.javaapplication.movies.domain;
 
+import com.example.javaapplication.movies.config.DurationConverter;
+import jakarta.persistence.*;
+import org.hibernate.annotations.ColumnTransformer;
 import org.postgresql.util.PGInterval;
 
 import java.time.Duration;
 import java.util.List;
 
-public class Movies {
+@Entity
+@Table(name = "movies")
+public class Movies extends AbstractAuditable {
 
-    private Long id;
+    @Id
+    @GeneratedValue(generator = "movies_generator")
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name = "movies_generator", sequenceName = "movies_movie_id_seq", allocationSize = 1)
+    private Long movieId;
     private String title;
     private int year;
+
+    @Enumerated(EnumType.STRING)
     private Genre genre;
-    private List<Actor> actors;
+
     private String director;
     private double rating;
+
+    @Column(name = "length", columnDefinition = "interval")
+    @Convert(converter =  DurationConverter.class)
+    @ColumnTransformer(write = "?::interval")
     private Duration length;
-    private String genreString;
+
+    @Transient
+    private List<Actor> actors;
+
+    //private String genreString;
 
     public Movies(String title, int year, String genreString, List<Actor> actors, String director, double rating, Duration length) {
         this.title = title;
@@ -52,12 +71,12 @@ public class Movies {
         this.year = year;
     }
 
-    public Long getId() {
-        return id;
+    public Long getMovieId() {
+        return movieId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setMovieId(Long movieId) {
+        this.movieId = movieId;
     }
 
     public Genre getGenre() {
@@ -96,7 +115,7 @@ public class Movies {
         return length;
     }
 
-    public void setLength(PGInterval pgInterval) {
+        public void setLength(PGInterval pgInterval) {
         if(pgInterval != null) {
             long days = pgInterval.getDays();
             long hours = pgInterval.getHours();
@@ -107,13 +126,13 @@ public class Movies {
         }
     }
   
-    public String getGenreString() {
-        return genreString;
-    }
-
-    public void setGenreString(String genreString) {
-        this.genreString = genreString;
-    }
+//    public String getGenreString() {
+//        return genreString;
+//    }
+//
+//    public void setGenreString(String genreString) {
+//        this.genreString = genreString;
+//    }
 
     @Override
     public String toString() {

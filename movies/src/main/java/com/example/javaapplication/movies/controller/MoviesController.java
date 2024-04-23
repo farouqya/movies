@@ -5,6 +5,7 @@ import com.example.javaapplication.movies.service.IMoviesService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RequestMapping("/api/movies")
@@ -22,6 +23,11 @@ public class MoviesController {
         return moviesService.get(moviesId);
     }
 
+    @GetMapping()
+    public List<Movies> getAllMovies() {
+        return moviesService.getALl();
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Movies add(@RequestBody Movies movies) {
@@ -29,6 +35,7 @@ public class MoviesController {
     }
 
     @PutMapping(path="/{movieId}")
+    @ResponseStatus(HttpStatus.OK)
     public Movies update(@PathVariable Long movieId, @RequestBody Movies movies) {
         return moviesService.update(movieId,movies);
     }
