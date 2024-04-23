@@ -75,13 +75,13 @@ class MoviesServiceTest {
     void addMoviesWithActors() {
         Movies movie1 = new Movies("First Movie", 1999, "SCIFIC", null, "Win Morisaki", 7.2, Duration.ofHours(1));
         Movies movie2 = new Movies();
-        Actor actor1 = new Actor("Jerry11", 30, "mouse", "American");
-        Actor actor2 = new Actor("Jerry15", 21, "mouse", "American");
+        Actor actor1 = new Actor("Jerry11", 30, "mouse", "American", movieTableId);
+        Actor actor2 = new Actor("Jerry15", 21, "mouse", "American", movieTableId);
         Mockito.when(moviesRepository.add(any()))
                 .thenAnswer((InvocationOnMock invocation) -> {
                     Object firstArgument = invocation.getArgument(0);
                     Movies moviesArg = (Movies) firstArgument;
-                    moviesArg.setId(445555L);
+                    moviesArg.setMovieId(445555L);
                     moviesArg.setActors(List.of(actor1, actor2));
                     return moviesArg;
                 });
@@ -98,7 +98,7 @@ class MoviesServiceTest {
         Mockito.verify(actorRepository).add(445555L, actor2);
 
         assertNotNull(addedMovie);
-        assertNotNull(addedMovie.getId());
+        assertNotNull(addedMovie.getMovieId());
         assertNotNull(addedMovie.getActors());
         assertEquals(2,addedMovie.getActors().size());
     }
@@ -111,7 +111,7 @@ class MoviesServiceTest {
                 .thenAnswer((InvocationOnMock invocation) -> {
                     Object firstArgument = invocation.getArgument(0);
                     Movies moviesArg = (Movies) firstArgument;
-                    moviesArg.setId(445555L);
+                    moviesArg.setMovieId(445555L);
                     return moviesArg;
                 });
 
@@ -120,7 +120,7 @@ class MoviesServiceTest {
 
 
         assertNotNull(addedMovie);
-        assertNotNull(addedMovie.getId());
+        assertNotNull(addedMovie.getMovieId());
         assertNotNull(addedMovie.getActors());
         assertEquals(0,addedMovie.getActors().size());
     }
@@ -141,8 +141,8 @@ class MoviesServiceTest {
     void updateGetMoviesWithActors() {
         Movies movie1 = new Movies("First Movie", 1999, "SCIFIC", null, "Win Morisaki", 7.2, Duration.ofHours(1));
         Movies movie2 = new Movies("Second Movie", 1999, "ROMANCE", null, "Leee", 7.2, Duration.ofHours(1));
-        Actor actor1 = new Actor("Jerry11", 30, "mouse", "American");
-        Actor actor2 = new Actor("Jerry15", 21, "mouse", "American");
+        Actor actor1 = new Actor("Jerry11", 30, "mouse", "American", movieTableId);
+        Actor actor2 = new Actor("Jerry15", 21, "mouse", "American", movieTableId);
 
         Mockito.when(moviesRepository.get(45L)).thenReturn(movie1);
         Mockito.when(actorRepository.getAllByMoviesId(45L)).thenReturn(
@@ -245,10 +245,10 @@ class MoviesServiceTest {
     void patchUpdateActorField() {
         Movies movie1 = new Movies();
         Movies movie2 = new Movies();
-        Actor actor1 = new Actor("Jerry11", 30, "mouse1", "American");
-        Actor actor2 = new Actor("Jerry15", 21, "mouse2", "American");
-        Actor actor3 = new Actor("Jerry12", 22, "mouse3", "American");
-        Actor actor4 = new Actor("Jerry20", 25, "mouse4", "American");
+        Actor actor1 = new Actor("Jerry11", 30, "mouse1", "American", movieTableId);
+        Actor actor2 = new Actor("Jerry15", 21, "mouse2", "American", movieTableId);
+        Actor actor3 = new Actor("Jerry12", 22, "mouse3", "American", movieTableId);
+        Actor actor4 = new Actor("Jerry20", 25, "mouse4", "American", movieTableId);
 
         Mockito.when(moviesRepository.get(50L)).thenReturn(movie1);
         Mockito.when(actorRepository.getAllByMoviesId(50L)).thenReturn(

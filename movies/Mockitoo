@@ -1,0 +1,20 @@
+//    @Test
+//    void updateGetActorsThrowException() {
+//
+//        Movies movie1 = new Movies("First Movie", 1999, "SCIFIC", null, "Win Morisaki", 7.2, Duration.ofHours(1));
+//        Mockito.when(moviesRepository.get(45L)).thenReturn(movie1);
+//        Mockito.when(actorRepository.getAllByMoviesId(45L)).thenReturn(null);
+////        Mockito.when(actorRepository.add(any(),any())).thenReturn(null);
+//
+////        Movies updatedMovies = moviesService.update(45L, movie1);
+//
+//        ResourceIsNotFoundException resourceIsNotFoundException =
+//                assertThrowsExactly(ResourceIsNotFoundException.class, () -> moviesService.update(45L, movie1));
+//
+//        assertEquals("Actors List is Null!!",resourceIsNotFoundException.getMessage());
+//    }
+
+-----------------------------------------------------
+
+//        Mockito.verify(moviesRepository).add(any());
+//        Mockito.verify(actorRepository, Mockito.never()).add(anyLong(), any());

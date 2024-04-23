@@ -1,0 +1,14 @@
+Index: movies/src/main/java/com/example/javaapplication/movies/MoviesApplication.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/movies/src/main/java/com/example/javaapplication/movies/MoviesApplication.java b/movies/src/main/java/com/example/javaapplication/movies/MoviesApplication.java
+--- a/movies/src/main/java/com/example/javaapplication/movies/MoviesApplication.java	
++++ b/movies/src/main/java/com/example/javaapplication/movies/MoviesApplication.java	
+@@ -9,5 +9,4 @@
+ 	public static void main(String[] args) {
+ 		SpringApplication.run(MoviesApplication.class, args);
+ 	}
+-
+ }

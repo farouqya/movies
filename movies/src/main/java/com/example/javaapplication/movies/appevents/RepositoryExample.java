@@ -1,16 +1,14 @@
 package com.example.javaapplication.movies.appevents;
 
-import com.example.javaapplication.movies.config.DatabaseToSelect;
 import com.example.javaapplication.movies.domain.Actor;
-import com.example.javaapplication.movies.domain.DatabaseType;
 import com.example.javaapplication.movies.domain.Movies;
 import com.example.javaapplication.movies.repository.IActorRepository;
 import com.example.javaapplication.movies.repository.IMoviesRepository;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
+
 import java.time.Duration;
 import java.util.List;
-import java.util.Scanner;
 
 //@Component
 public class RepositoryExample {
@@ -26,13 +24,14 @@ public class RepositoryExample {
     @EventListener(ApplicationReadyEvent.class)
     public void moviesRepositoryPlayground() {
 
-        System.out.println("Please select the DataBase :  " + "Please enter the word 'Postgres' as it is the only supported database : ");
-        Scanner dataBaseType = new Scanner(System.in);
-        String value = dataBaseType.nextLine();
+        System.out.println(iMoviesRepository.get(5L));
+//        System.out.println("Please select the DataBase :  " + "Please enter the word 'Postgres' as it is the only supported database : ");
+//        Scanner dataBaseType = new Scanner(System.in);
+//        String value = dataBaseType.nextLine();
 
-        if (DatabaseToSelect.databaseToCompare(value).equals(DatabaseType.POSTGRES)) {
-            Movies movies = iMoviesRepository.get(5L);
-            System.out.println(movies);
+//        if (DatabaseToSelect.databaseToCompare(value).equals(DatabaseType.POSTGRES)) {
+//            Movies movies = iMoviesRepository.get(5L);
+//            System.out.println(movies);
 
             // To add Movies -->
         Movies moviesToBeAddedToDatabase = new Movies("TTTTTTT", 2022, "ACTION", null, "Win Morisaki", 7.2, Duration.ofHours(1));
@@ -52,7 +51,6 @@ public class RepositoryExample {
             List<Movies> moviesList = iMoviesRepository.getAll();
             System.out.println(moviesList);
         }
-    }
 
     @EventListener(ApplicationReadyEvent.class)
     public void actorsRepositoryPlayground() {

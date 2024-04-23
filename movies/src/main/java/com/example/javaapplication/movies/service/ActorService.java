@@ -4,8 +4,13 @@ import com.example.javaapplication.movies.domain.Actor;
 import com.example.javaapplication.movies.domain.Movies;
 import com.example.javaapplication.movies.exceptions.ArgumentException;
 import com.example.javaapplication.movies.exceptions.ResourceIsNotFoundException;
+import com.example.javaapplication.movies.repository.ActorRepo;
 import com.example.javaapplication.movies.repository.IActorRepository;
 import com.example.javaapplication.movies.repository.IMoviesRepository;
+import com.example.javaapplication.movies.repository.MoviesRepo;
+import jakarta.transaction.Transactional;
+
+import java.util.List;
 import java.util.Map;
 
 public class ActorService implements IActorService {
@@ -14,22 +19,41 @@ public class ActorService implements IActorService {
     private final IActorRepository actorRepository;
     private final IMoviesService moviesService;
 
-    public ActorService(IMoviesRepository moviesRepository, IActorRepository actorRepository, IMoviesService moviesService) {
+    // Hibernate method -->
+    private final MoviesRepo moviesRepo;
+    private final ActorRepo actorRepo;
+
+    public ActorService(IMoviesRepository moviesRepository, IActorRepository actorRepository, IMoviesService moviesService, MoviesRepo moviesRepo, ActorRepo actorRepo) {
         this.moviesRepository = moviesRepository;
         this.actorRepository = actorRepository;
         this.moviesService = moviesService;
+        this.moviesRepo = moviesRepo;
+        this.actorRepo = actorRepo;
     }
 
     @Override
+    @Transactional
     public Actor get(Long actorId) {
-        Actor actor = actorRepository.get(actorId);
-        if (actor == null) {
-            throw new ArgumentException("Actor with id " + actorId + " is not found");
-        }
-        return actor;
+//        Actor actor = actorRepository.get(actorId);
+
+//        if (actor == null) {
+//            throw new ArgumentException("Actor with id " + actorId + " is not found");
+//        }
+//        return actor;
+
+        return actorRepo.findById(actorId)
+                .orElseThrow(() -> new ResourceIsNotFoundException("Actor with id " + actorId + " is not found"));
     }
 
     @Override
+    @Transactional
+    public List<Actor> getAll() {
+//        return actorRepository.getAll();
+        return actorRepo.findAll();
+    }
+
+    @Override
+    @Transactional
     public Actor add(Long movieId, Actor actor) {
         if (actor.getAge() < 0) {
             throw new ArgumentException("Age should not have a negative value !! Please check..");
@@ -38,22 +62,32 @@ public class ActorService implements IActorService {
             throw new ResourceIsNotFoundException("Name is a must parameter!!");
         }
 
-        Movies movies = moviesService.get(movieId);
-        Actor actorsToBeAdded = actorRepository.add(movieId, actor);
-        Long addedActorsId = actorsToBeAdded.getId();
-        return get(addedActorsId);
+
+//        Movies movies = moviesService.get(movieId);
+//        Actor actorsToBeAdded = actorRepository.add(movieId, actor);
+//        Long addedActorsId = actorsToBeAdded.getId();
+//        return get(addedActorsId);
+
+        if (moviesRepo.findById(movieId).isPresent()) {
+            actor.setMovieTableId(movieId);
+            return actorRepo.save(actor);
+        }
+        throw new ResourceIsNotFoundException("Movie with id " + movieId + " is not found");
     }
 
     @Override
     public Actor update(Long actorsId, Actor actorsToBeAdded, Long movieId) throws ResourceIsNotFoundException {
         get(actorsId);
         Movies movies = moviesService.get(movieId);
-        if (movies != null) {
-            Actor updatedActor = actorRepository.update(actorsId, actorsToBeAdded, movieId);
-            return get(actorsId);
-        } else {
-            throw new ResourceIsNotFoundException("Movie with id "  + movieId + " is not found");
-        }
+//        if (movies != null) {
+//            Actor updatedActor = actorRepository.update(actorsId, actorsToBeAdded, movieId);
+//            return get(actorsId);
+//        } else {
+//            throw new ResourceIsNotFoundException("Movie with id "  + movieId + " is not found");
+//        }
+
+        actorsToBeAdded.setMovieTableId(movieId);
+        return actorRepo.save(actorsToBeAdded);
     }
 
     @Override
@@ -90,8 +124,10 @@ public class ActorService implements IActorService {
     }
 
     @Override
+    @Transactional
     public void delete(Long actorId) {
         get(actorId);
-        actorRepository.delete(actorId);
+//        actorRepository.delete(actorId);
+        actorRepo.deleteById(actorId);
     }
 }

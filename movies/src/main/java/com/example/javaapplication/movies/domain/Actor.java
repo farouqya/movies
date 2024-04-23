@@ -1,13 +1,21 @@
 package com.example.javaapplication.movies.domain;
 
-public class Actor {
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "actors")
+public class Actor extends AbstractAuditable {
 
     private String name;
     private int age;
     private String gender;
     private String nationality;
+    @Id
+    @GeneratedValue(generator = "actors_generator")
+    @SequenceGenerator(name = "actors_generator", sequenceName = "actors_actors_id_seq", allocationSize = 1)
     private Long id;
 
+    private Long movieTableId;
 
     public Actor(String name, int age, String gender, String nationality) {
         this.name = name;
@@ -57,6 +65,14 @@ public class Actor {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getMovieTableId() {
+        return movieTableId;
+    }
+
+    public void setMovieTableId(Long movieTableId) {
+        this.movieTableId = movieTableId;
     }
 
     @Override

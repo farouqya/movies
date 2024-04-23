@@ -5,11 +5,17 @@ import com.example.javaapplication.movies.domain.Genre;
 import com.example.javaapplication.movies.domain.Movies;
 import com.example.javaapplication.movies.exceptions.ArgumentException;
 import com.example.javaapplication.movies.exceptions.ResourceIsNotFoundException;
+import com.example.javaapplication.movies.jms.JmsMoviesSender;
+import com.example.javaapplication.movies.repository.ActorRepo;
 import com.example.javaapplication.movies.repository.IActorRepository;
 import com.example.javaapplication.movies.repository.IMoviesRepository;
+import com.example.javaapplication.movies.repository.MoviesRepo;
 import com.example.javaapplication.movies.util.PostgresUtil;
+import jakarta.transaction.Transactional;
 import org.postgresql.util.PGInterval;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,27 +26,71 @@ import java.util.stream.Collectors;
 @Service
 public class MoviesService implements IMoviesService {
 
+    // Old Method -->
     private final IMoviesRepository moviesRepository;
     private final IActorRepository actorRepository;
 
+    // Hibernate method -->
+    private final MoviesRepo moviesRepo;
+    private final ActorRepo actorRepo;
+
+    //ActiveMq sender -->
+    private final JmsMoviesSender moviesSender;
+
+    @Autowired
     public MoviesService(IMoviesRepository moviesRepository,
-                         IActorRepository actorRepository) {
+                         IActorRepository actorRepository,
+                         MoviesRepo moviesRepo, ActorRepo actorRepo, JmsMoviesSender moviesSender) {
         this.moviesRepository = moviesRepository;
         this.actorRepository = actorRepository;
+        this.moviesRepo = moviesRepo;
+        this.actorRepo = actorRepo;
+        this.moviesSender = moviesSender;
     }
 
     @Override
+    @Transactional
     public Movies get(Long id) {
-        Movies movies = moviesRepository.get(id);
-        if (movies == null) {
-            throw new ResourceIsNotFoundException("Movie with id " + id + " is not found");
-        }
-        List<Actor> actors = actorRepository.getAllByMoviesId(id);
-        movies.setActors(actors);
+
+        // Old method -->
+//        Movies movies = moviesRepository.get(id);
+//        if (movies == null) {
+//            throw new ResourceIsNotFoundException("Movie with id " + id + " is not found");
+//        }
+//        List<Actor> actors = actorRepository.getAllByMoviesId(id);
+//        movies.setActors(actors);
+//        return movies;
+
+        // Via Hibernate code -->
+        Movies movies = moviesRepo.findById(id)
+                .orElseThrow(() -> new ResourceIsNotFoundException("Movie with id " + id + " is not found"));
+        movies.setActors(actorRepo.findBymovieTableId(id));
         return movies;
     }
 
     @Override
+    @Transactional
+    public List<Movies> getALl() {
+        List<Movies> listMovies = moviesRepository.getAll();
+        if (listMovies == null) {
+            throw new ResourceIsNotFoundException("No movies exist!!");
+        }
+
+        // Old Way -->
+//        List<Actor> actorList = actorRepository.getAll();
+//        listMovies.forEach(movies -> movies.setActors(actorList));
+//        return listMovies;
+
+        // Via Hibernate -->
+        List<Movies> movies = moviesRepo.findAll();
+        for (Movies movie : movies) {
+            movie.setActors(actorRepo.findAll());
+        }
+        return movies;
+    }
+
+    @Override
+    @Transactional
     public Movies add(Movies movies) {
         if (movies.getYear() <= 0) {
             throw new ArgumentException("Year must be a positive number!! ");
@@ -52,31 +102,54 @@ public class MoviesService implements IMoviesService {
             throw new ResourceIsNotFoundException("((Name and Genre)) should not be null!!");
         }
 
-        Movies addedMovies = moviesRepository.add(movies);
-        Long addedMoviesId = addedMovies.getId();// primary Key
-        if(movies.getActors() != null) {
-            movies.getActors().forEach(actors -> actorRepository.add(addedMoviesId, actors)); // ForeignID Key..
-        }
+        // Old Way -->
+//        Movies addedMovies = moviesRepository.add(movies);
+//        Long addedMoviesId = addedMovies.getMovieId();// primary Key
+//        if(movies.getActors() != null) {
+//            movies.getActors().forEach(actors -> actorRepository.add(addedMoviesId, actors)); // ForeignID Key..
+//        }
+//
+//        return get(addedMoviesId);
 
-        return get(addedMoviesId);
+        // Via Hibernate -->
+        Movies addedMovies = moviesRepo.save(movies);
+        List<Actor> actorList = movies.getActors();
+        for (Actor actor: actorList) {
+            actor.setMovieTableId(movies.getMovieId());
+        }
+        actorRepo.saveAll(movies.getActors());
+        moviesSender.sendMoviesAddedMessage(addedMovies);
+        return addedMovies;
     }
 
     @Override
+    @Transactional
     public Movies update(Long movieId, Movies movies) {
 
         get(movieId);
-        Movies updatedMovies = moviesRepository.update(movieId, movies);
-        actorRepository.deleteAllByMoviesId(movieId);
-        try {
-            movies.getActors().forEach(actor -> actorRepository.add(movieId, actor));
-        } catch (Exception e) {
-            System.out.println("Actors List is Null!!");
-            return null;
+        movies.setMovieId(movieId);
+//        Movies updatedMovies = moviesRepository.update(movieId, movies);
+//        actorRepository.deleteAllByMoviesId(movieId);
+//
+//        if (movies.getActors() != null) {
+//            movies.getActors().forEach(actor -> actorRepository.add(movieId, actor));
+//        }
+//        return get(movieId);
+
+        Movies addedMovies = moviesRepo.save(movies);
+        List<Actor> actorList = movies.getActors();
+
+        if (actorList != null) {
+            for (Actor actor : actorList) {
+                actor.setMovieTableId(movieId);
+                actorRepo.saveAll(movies.getActors());
+            }
         }
-        return get(movieId);
+        return addedMovies;
     }
 
     @Override
+    @Transactional
     public Movies patchUpdate(Long movieId, Map<Object, Object> updates) {
         Movies movies1 = get(movieId);
 
@@ -149,9 +222,16 @@ public class MoviesService implements IMoviesService {
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         get(id);
-        actorRepository.deleteAllByMoviesId(id);
-        moviesRepository.delete(id);
+
+        // Old way
+//        actorRepository.deleteAllByMoviesId(id);
+//        moviesRepository.delete(id);
+
+        //Via Hibernate Way -->
+        actorRepo.deleteBymovieTableId(id);
+        moviesRepo.deleteById(id);
     }
 }

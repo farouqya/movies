@@ -1,6 +1,7 @@
 package com.example.javaapplication.movies.appevents;
 
 import com.example.javaapplication.movies.domain.Actor;
+import com.example.javaapplication.movies.domain.Movies;
 import com.example.javaapplication.movies.service.IActorService;
 import com.example.javaapplication.movies.service.IMoviesService;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -24,9 +25,9 @@ public class ServiceExamples {
     public void movieServicePlayground() {
 
         //Movies moviesToBeAddedToDatabase = new Movies("Run for the Money", 2022, Genre.ACTION, null, "Win Morisaki", 7.2, Duration.ofHours(1));
-        //Movies movie = moviesService.get(10L);
-//        System.out.println(movie.getActors());
-//        System.out.println(movie);
+        Movies movie = moviesService.get(10L);
+        System.out.println(movie.getActors());
+        System.out.println(movie);
 //
 //        List<Actor> actorsToBeAdded = Arrays.asList( new Actor("Mai Whelan", 56, "Female", "American"));
 //
